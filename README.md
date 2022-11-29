@@ -9,6 +9,9 @@ Projekt ma na celu ułatwienie przeszukiwania klauzul przez:
 
 Dodatkowo projekt powstał w celu poćwiczenia pracy z wyszukiwarkami "Full-text".
 
+<img width="600" src="https://user-images.githubusercontent.com/25948390/204420393-e70df196-f8aa-4668-bd8b-4452733a17d5.png">
+<img width="600" src="https://user-images.githubusercontent.com/25948390/204420412-89581c7c-02f5-475c-8e83-a6bd92108f0c.png">
+
 ## Instrukcja odpalenia projektu
 
 1. Zainstaluj zależności za pomocą yarn, node 16+
@@ -119,7 +122,7 @@ JSON.stringify(miniSearch): 6,8 MB    gzip: 1,5 MB
 Należy sprawdzić jak długo zajmuje `addAll` na wolnych procesorach, szczególnie telefonach.
 
 
-**TODO:**
+## TODO
 
 - Użycie stemming i lemmetyzacji zamiast fuzzy
 - Sugestie za pomocą `autoSuggest`
