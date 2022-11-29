@@ -124,14 +124,14 @@ Należy sprawdzić jak długo zajmuje `addAll` na wolnych procesorach, szczegól
 
 ## TODO
 
-- Użycie stemming i lemmetyzacji zamiast fuzzy
 - Sugestie za pomocą `autoSuggest`
-- Natychmiastowe wyszukiwanie bez czekania na debounce w przypadku kliknięcia enter
+- ~Natychmiastowe wyszukiwanie bez czekania na debounce w przypadku kliknięcia enter~
 - Permalink do wyników wyszukiwania (w query parametrach)
 - Permalinki do konkretnych klauzul
 - Linkowanie do wyroków lub konkretnych klauzul na stronie uokiku.
 - Dokonywanie wyszukiwań w Web Workerze
 - Dodanie Service Workera aby wyszukiwarka była dostępna offline i zarządzała cachem dla pobranego rejestru.
 - Automatyczna aktualizacja klauzul - GitHub action na sprawdzanie i porównywanie czy csv udostępniony na stronie https://rejestr.uokik.gov.pl/csv-archive/uokik-rejestr-klauzul-niedozwolonych-automat.csv różni się od wersji w repozytorium.
+- Użycie stemming i lemmetyzacji zamiast fuzzy
 - Testy automatyczne
 

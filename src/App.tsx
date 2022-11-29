@@ -6,16 +6,16 @@ import { useDebounce } from 'use-debounce';
 import classnames from 'classnames';
 
 type Klauzula = {
- id: string;
- powod: string;
- pozwani: string;
- wzorzec: string;
- sygnatura: string;
- data_wyroku: string;
- sad: string;
- data_wpisu: string;
- branza: string;
- uwagi: string; 
+  id: string;
+  powod: string;
+  pozwani: string;
+  wzorzec: string;
+  sygnatura: string;
+  data_wyroku: string;
+  sad: string;
+  data_wpisu: string;
+  branza: string;
+  uwagi: string; 
 }
 
 type SearchResult = Klauzula & MiniSearchResult;
@@ -35,39 +35,54 @@ export default function App() {
     if (typeof window.miniSearch !== 'undefined' && window.miniSearch._documentCount > 0) {
       return;
     }
-    let miniSearch = new MiniSearch({
+    const miniSearch = new MiniSearch({
       fields: ['wzorzec'],
       storeFields: Object.values(csvColumns)
     })
+    console.time('Index documents');
     miniSearch.addAll(klauzule)
+    console.timeEnd('Index documents');
     // @ts-expect-error
     window.miniSearch = window.miniSearch || miniSearch;
-    console.log(miniSearch)
   }, [])
 
- 
- React.useEffect(() => {
+
+  function executeSearch(term: string) {
     // @ts-expect-error
     if (typeof window.miniSearch === 'undefined') {
       return;
     }
     // @ts-expect-error
-    setSearchResults(window.miniSearch.search(searched, { fuzzy: 0.2 }));
+    setSearchResults(window.miniSearch.search(term, { fuzzy: 0.2 }));
+  }
+ 
+  React.useEffect(() => {
+    executeSearch(searched) 
   }, [searched]); 
 
- const expanded = searched.length === 0;
+  const expanded = searched.length === 0;
 
   return (
     <div className="p-4 md:max-w-4xl m-auto">
       <h1 className={classnames("text-2xl mb-4")}>Wyszukiwarka klauzul niedozwolonych</h1>
       <p className={classnames("my-8 prose lg:prose-xl", { "hidden": !expanded })}>Wyszukaj wśród wszystkich klauzul, które zebrał UOKiK w ramach swojego rejestru klauzul niedozwolonych. To ten sam który dostępny jest pod <a href="https://rejestr.uokik.gov.pl/" rel="noopener" target="_blank" className="text-blue-500">rejestr.uokik.gov.pl</a> lecz z interfejsem skupionym na wyszukiwaniu treści tych klauzul (wzorców).</p>
       <div>
-        <input type="text" className="w-full" onChange={handleChange} placeholder="wpisz wyszukiwaną frazę lub zdanie np. 'waluty na rynku' albo 'rękojmia'"/> 
+        <input 
+        type="text" 
+        className="w-full" 
+        onChange={handleChange} 
+        onKeyUp={(e) => {
+          if (e.key !== "Enter") {
+            return;
+          }
+          executeSearch(e.currentTarget.value);
+        }} 
+        placeholder="wpisz wyszukiwaną frazę lub zdanie np. 'waluty na rynku' albo 'rękojmia'" /> 
       </div>
       <article className="prose lg:prose-lg">
         {searched.length > 0 && <p className="text-gray-500">Znaleziono: {searchResults.length}</p>}
-        {searchResults.map(result => <Result {...result} />)
-      }
+        {searchResults.slice(0,100).map(result => <Result {...result} />)
+        }
       </article>
     </div>
   );
@@ -80,7 +95,7 @@ function Result({ powod, pozwani, wzorzec, sygnatura, data_wyroku, sad, data_wpi
 
   return <section className="px-4 py-6 border-b">
     {showTop && <aside className="text-gray-500">{powod || shrug} &rarr; {pozwani || shrug}</aside>}
-    <blockquote dangerouslySetInnerHTML={{ __html: wzorzec}} />
+    <blockquote dangerouslySetInnerHTML={{ __html: wzorzec }} />
     <aside className="text-gray-500">Wyrok: {sygnatura} wydany {data_wyroku} przez {sad}</aside>
     <aside className="text-gray-500">{uwagi}</aside>
     <aside className="text-gray-500">Wpisano w rejestr: {data_wpisu}, Branża: {bran}</aside>
