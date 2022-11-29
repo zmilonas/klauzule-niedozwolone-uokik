@@ -1,6 +1,6 @@
 import React from 'react';
 import MiniSearch, { SearchResult as MiniSearchResult } from 'minisearch';
-import klauzule from './klauzule.json';
+import klauzule from '../data/klauzule.json';
 import { csvColumns } from './config';
 import { useDebounce } from 'use-debounce';
 import classnames from 'classnames';
