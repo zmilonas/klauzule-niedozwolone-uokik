@@ -1,9 +1,26 @@
 import React from 'react';
-import MiniSearch, { SearchResult } from 'minisearch';
+import MiniSearch, { SearchResult as MiniSearchResult } from 'minisearch';
 import klauzule from './klauzule.json';
 import { csvColumns } from './config';
 import { useDebounce } from 'use-debounce';
 import classnames from 'classnames';
+
+type Klauzula = {
+ id: string;
+ powod: string;
+ pozwani: string;
+ wzorzec: string;
+ sygnatura: string;
+ data_wyroku: string;
+ sad: string;
+ data_wpisu: string;
+ branza: string;
+ uwagi: string; 
+}
+
+type SearchResult = Klauzula & MiniSearchResult;
+
+const shrug = `¯\\\_(ツ)_/¯`;
 
 export default function App() {
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -22,7 +39,6 @@ export default function App() {
       fields: ['wzorzec'],
       storeFields: Object.values(csvColumns)
     })
-    // @ts-expect-error
     miniSearch.addAll(klauzule)
     // @ts-expect-error
     window.miniSearch = window.miniSearch || miniSearch;
@@ -49,16 +65,24 @@ export default function App() {
         <input type="text" className="w-full" onChange={handleChange} placeholder="wpisz wyszukiwaną frazę lub zdanie np. 'waluty na rynku' albo 'rękojmia'"/> 
       </div>
       <article className="prose lg:prose-lg">
-        {searched.length > 0 && <div className="text-gray-500">Wyników: {searchResults.length}</div>}
-        {searchResults.map(result => 
-          <div className="mb-2 border px-4" key={result.id}>
-          <p className="text-gray-500">{result.powod} &rarr; {result.pozwani}</p>
-          <blockquote dangerouslySetInnerHTML={{ __html: result.wzorzec}} />
-          <p className="text-gray-500">{result.sygnatura}, {result.data_wyroku}, {result.sad}</p>
-          </div>
-        )
+        {searched.length > 0 && <p className="text-gray-500">Znaleziono: {searchResults.length}</p>}
+        {searchResults.map(result => <Result {...result} />)
       }
       </article>
     </div>
   );
+}
+
+function Result({ powod, pozwani, wzorzec, sygnatura, data_wyroku, sad, data_wpisu, branza, uwagi, ...result }: Klauzula) {
+
+  const bran = branza.charAt(0).toLocaleUpperCase() + branza.slice(1).toLocaleLowerCase();
+  const showTop = Boolean(powod || pozwani);
+
+  return <section className="px-4 py-6 border-b">
+    {showTop && <aside className="text-gray-500">{powod || shrug} &rarr; {pozwani || shrug}</aside>}
+    <blockquote dangerouslySetInnerHTML={{ __html: wzorzec}} />
+    <aside className="text-gray-500">Wyrok: {sygnatura} wydany {data_wyroku} przez {sad}</aside>
+    <aside className="text-gray-500">{uwagi}</aside>
+    <aside className="text-gray-500">Wpisano w rejestr: {data_wpisu}, Branża: {bran}</aside>
+  </section>
 }
