@@ -90,6 +90,8 @@ Powyższa lista to znalezione zależności na podstawie wyszukania "full text se
 
 ## Przygotowanie danych
 
+Spróbuj najpierw skryptem `yarn update-csv`
+
 1. Pobranie CSV z rejestrem, z https://rejestr.uokik.gov.pl/csv-archive/uokik-rejestr-klauzul-niedozwolonych-automat.csv
 
     ```
@@ -103,13 +105,13 @@ Powyższa lista to znalezione zależności na podstawie wyszukania "full text se
     ```
     albo
     ```
-    iconv -f windows-1250 -t utf-8 data/uokik-rejestr-klauzul-niedozwolonych-automat.csv 
+    iconv -f windows-1250 -t utf-8 data/uokik-rejestr-klauzul-niedozwolonych-automat.csv > data/uokik.rejestr-klauzul-niedozwolonych-automat.csv
     ```
 
 3. Konwersja z CSV na JSON za pomocą `csv-parser`.
 
     ```
-    node --loader ts-node/esm data/convert.ts data/uokik-rejestr-klauzul-niedozwolonych-automat.csv data/klauzule.json
+    tsx data/convert.ts data/uokik-rejestr-klauzul-niedozwolonych-automat.csv data/klauzule.json
     ```
 
 4. Teraz można te klauzule wykorzystać jako zbiór dokumentów dla `miniSearch`.
