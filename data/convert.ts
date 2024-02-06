@@ -1,6 +1,6 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import { parse } from 'csv-parse/sync';
-import { csvColumns } from './src/config';
+import { csvColumns } from '../src/config.ts';
 
 const delimiter = ";";
 
